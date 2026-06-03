@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 const aiCapabilities = [
   { title: 'Генерація контенту', desc: 'Тексти, ідеї, сценарії за секунди' },
@@ -14,14 +15,25 @@ const aiCapabilities = [
 
 export default function AICapabilities() {
   const [flipped, setFlipped] = useState<number | null>(null);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
   return (
-    <section className="py-20 bg-darker">
+    <section ref={ref} className="py-20 bg-darker">
       <div className="container-custom">
-        <h2 className="text-center mb-12 gradient-text">Можливості ШІ в нашій роботі</h2>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          className="text-center mb-12 gradient-text"
+        >
+          Можливості ШІ в нашій роботі
+        </motion.h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {aiCapabilities.map((item, idx) => (
-            <div
+            <motion.div
               key={idx}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: idx * 0.05 }}
               className="relative h-40 cursor-pointer perspective"
               onMouseEnter={() => setFlipped(idx)}
               onMouseLeave={() => setFlipped(null)}
@@ -33,13 +45,13 @@ export default function AICapabilities() {
               >
                 <div className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-4 text-center">
                   <span className="text-red text-3xl mb-2">✨</span>
-                  <h3 className="font-bold text-lg">{item.title}</h3>
+                  <h3 className="font-bold text-lg text-white">{item.title}</h3>
                 </div>
                 <div className="absolute inset-0 backface-hidden flex items-center justify-center p-4 text-center rotate-y-180 bg-red/10 rounded-xl">
                   <p className="text-sm text-gray-200">{item.desc}</p>
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

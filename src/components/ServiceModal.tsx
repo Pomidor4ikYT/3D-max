@@ -42,7 +42,7 @@ export default function ServiceModal({ service, onClose }: { service: any; onClo
           {!submitted ? (
             <>
               <h3 className="text-2xl font-bold mb-4 gradient-text">Оформлення замовлення</h3>
-              <div className="bg-black/30 p-4 rounded-lg mb-4">
+              <div className="bg-black/50 p-4 rounded-lg mb-4 neon-border">
                 <p className="font-semibold text-white mb-2">Ви обрали:</p>
                 <ul className="text-sm text-gray-300 space-y-1">
                   {items.map((item: any, idx: number) => (
@@ -53,9 +53,9 @@ export default function ServiceModal({ service, onClose }: { service: any; onClo
                   <p className="text-lg font-bold text-red">Загалом: {total.toLocaleString()} ₴</p>
                 </div>
               </div>
-              <div className="bg-black/30 p-3 rounded-lg mb-4 text-center">
+              <div className="bg-black/50 p-3 rounded-lg mb-4 text-center neon-border">
                 <p className="text-gray-300 text-sm">
-                  📞 <span className="font-semibold">Після оформлення заявки</span> ми зателефонуємо або напишемо в Telegram протягом 12 годин.
+                  📞 Після оформлення заявки ми зателефонуємо або напишемо в Telegram протягом 12 годин.
                 </p>
               </div>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -102,9 +102,7 @@ export default function ServiceModal({ service, onClose }: { service: any; onClo
                 </svg>
               </div>
               <h3 className="text-2xl font-bold gradient-text mb-2">Дякуємо!</h3>
-              <p className="text-gray-300">
-                Ваше замовлення прийнято. Ми зв'яжемося з вами протягом 12 годин.
-              </p>
+              <p className="text-gray-300">Ваше замовлення прийнято. Ми зв'яжемося з вами протягом 12 годин.</p>
             </div>
           )}
           <button onClick={onClose} className="mt-6 text-gray-400 text-sm block w-full text-center hover:text-white transition">

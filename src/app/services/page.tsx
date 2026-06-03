@@ -5,7 +5,7 @@ import Button from '@/components/ui/Button';
 import ServiceModal from '@/components/ServiceModal';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Маппінг: назва головної послуги -> категорія детальних послуг
+// Маппінг назви послуги до категорії додаткових послуг
 const serviceCategoryMap: Record<string, keyof typeof services> = {
   'AI Маркетинг': 'aiServices',
   'SMM': 'promotion',
@@ -54,17 +54,14 @@ export default function ServicesPage() {
   };
 
   const handleOrder = () => {
-    if (selectedService) {
-      const items = [selectedService, ...selectedSubServices];
-      setModalService({ ...selectedService, items });
+    if (selectedService && selectedSubServices.length > 0) {
+      setModalService({ ...selectedService, items: selectedSubServices });
     }
   };
 
-  const mainPrice = selectedService ? parsePrice(selectedService.price) : 0;
-  const subTotal = selectedSubServices.reduce((sum, item) => sum + parsePrice(item.price), 0);
-  const total = mainPrice + subTotal;
+  const total = selectedSubServices.reduce((sum, item) => sum + parsePrice(item.price), 0);
 
-  // Детальний перегляд вибраної послуги
+  // Детальний перегляд вибраної послуги (чорний дизайн)
   if (selectedService) {
     const detailed = getDetailedServices(selectedService.title);
     return (
@@ -100,64 +97,52 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="bg-darker rounded-2xl p-6 neon-border mb-8"
+              className="bg-black/40 p-6 rounded-xl neon-border mb-8"
             >
               <h3 className="text-2xl font-bold text-red mb-4 text-center">
-                Оберіть додаткові послуги (можна кілька)
+                Оберіть послуги (можна кілька)
               </h3>
-              {detailed.length > 0 ? (
-                <div className="grid md:grid-cols-2 gap-4">
-                  {detailed.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      whileHover={{ scale: 1.02 }}
-                      className={`bg-black/50 p-4 rounded-xl border transition-all cursor-pointer ${
-                        selectedSubServices.some(i => i.title === item.title)
-                          ? 'border-red bg-red/10'
-                          : 'border-red/20 hover:border-red'
-                      }`}
-                      onClick={() => toggleSubService(item)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h4 className="font-bold text-lg text-white">{item.title}</h4>
-                          <p className="text-red text-sm font-semibold mt-1">{item.price}</p>
-                        </div>
-                        <motion.div
-                          animate={{ scale: selectedSubServices.some(i => i.title === item.title) ? 1.1 : 1 }}
-                          className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                            selectedSubServices.some(i => i.title === item.title)
-                              ? 'bg-red border-red'
-                              : 'border-gray-500'
-                          }`}
-                        >
-                          {selectedSubServices.some(i => i.title === item.title) && (
-                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </motion.div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-400 text-center">Немає додаткових пакетів. Зв'яжіться з нами для індивідуального розрахунку.</p>
-              )}
+              <div className="space-y-3">
+                {/* Основна послуга */}
+                <label className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red/10 transition border border-red/30">
+                  <input
+                    type="checkbox"
+                    checked={selectedSubServices.some(s => s.title === selectedService.title)}
+                    onChange={() => toggleSubService(selectedService)}
+                    className="w-5 h-5 accent-red"
+                  />
+                  <div className="flex-1">
+                    <p className="font-bold text-white">{selectedService.title}</p>
+                    <p className="text-red text-sm">{selectedService.price}</p>
+                  </div>
+                </label>
 
-              {(selectedSubServices.length > 0 || selectedService) && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-6 p-4 bg-black/40 rounded-xl"
-                >
-                  <h4 className="font-bold text-white mb-2">Ви обрали:</h4>
+                {/* Додаткові послуги */}
+                {detailed.length > 0 && (
+                  <div className="pl-6 border-l-2 border-red/30 space-y-2 mt-2">
+                    <p className="text-gray-300 text-sm">Додаткові опції:</p>
+                    {detailed.map((item, idx) => (
+                      <label key={idx} className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-red/10 transition">
+                        <input
+                          type="checkbox"
+                          checked={selectedSubServices.some(s => s.title === item.title)}
+                          onChange={() => toggleSubService(item)}
+                          className="w-5 h-5 accent-red"
+                        />
+                        <div className="flex-1">
+                          <p className="text-white">{item.title}</p>
+                          <p className="text-red text-sm">{item.price}</p>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {selectedSubServices.length > 0 && (
+                <div className="mt-6 p-4 bg-black/50 rounded-xl neon-border">
+                  <h4 className="font-bold text-white mb-2">Вибрано:</h4>
                   <ul className="text-sm text-gray-300 space-y-1">
-                    <li>• {selectedService.title} – {selectedService.price}</li>
                     {selectedSubServices.map((item, i) => (
                       <li key={i}>• {item.title} – {item.price}</li>
                     ))}
@@ -165,13 +150,18 @@ export default function ServicesPage() {
                   <div className="mt-3 pt-2 border-t border-red/30">
                     <p className="text-lg font-bold text-red">Загалом: {total.toLocaleString()} ₴</p>
                   </div>
-                </motion.div>
+                </div>
               )}
 
-              <div className="mt-6 text-center flex gap-4 justify-center">
+              <div className="mt-6 text-center">
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button onClick={handleOrder} variant="primary" className="inline-flex items-center gap-2">
-                    🛒 Замовити {selectedSubServices.length > 0 ? `(${selectedSubServices.length} додаткових)` : ''}
+                  <Button
+                    onClick={handleOrder}
+                    variant="primary"
+                    className="inline-flex items-center gap-2"
+                    disabled={selectedSubServices.length === 0}
+                  >
+                    🛒 Замовити {selectedSubServices.length > 0 ? `(${selectedSubServices.length} послуг)` : ''}
                   </Button>
                 </motion.div>
               </div>
@@ -191,7 +181,7 @@ export default function ServicesPage() {
     );
   }
 
-  // Стан сітка (всі послуги) + готові продукти та регулярні послуги
+  // Сітка всіх послуг (чорний дизайн)
   return (
     <div className="pt-32 pb-20 container-custom">
       <motion.div
@@ -213,7 +203,7 @@ export default function ServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.08, duration: 0.4 }}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              className="bg-darker p-6 rounded-xl border border-red/30 hover:border-red hover:shadow-xl hover:shadow-red/10 transition-all group flex flex-col h-full"
+              className="bg-black/40 p-6 rounded-xl border border-red/30 hover:border-red hover:shadow-xl hover:shadow-red/10 transition-all group flex flex-col h-full"
             >
               <motion.div
                 className="text-5xl mb-4"
@@ -246,7 +236,8 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="bg-darker p-6 rounded-2xl neon-border hover:scale-[1.02] transition-all flex flex-col h-full"
+                whileHover={{ scale: 1.02 }}
+                className="bg-black/40 p-6 rounded-2xl neon-border flex flex-col h-full"
               >
                 <h3 className="text-2xl font-bold gradient-text mb-2">{pkg.name}</h3>
                 <p className="text-gray-300 mb-4 text-sm flex-grow">{pkg.desc}</p>
@@ -258,7 +249,6 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          {/* Регулярні послуги */}
           <h2 className="text-center mb-6 gradient-text">Регулярні послуги (супровід)</h2>
           <p className="text-center text-gray-400 mb-12">Щомісячна стабільність</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -268,7 +258,8 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="bg-darker p-6 rounded-2xl neon-border hover:scale-[1.02] transition-all flex flex-col h-full"
+                whileHover={{ scale: 1.02 }}
+                className="bg-black/40 p-6 rounded-2xl neon-border flex flex-col h-full"
               >
                 <h3 className="text-2xl font-bold gradient-text mb-2">{pkg.name}</h3>
                 <p className="text-gray-300 mb-4 text-sm flex-grow">{pkg.desc}</p>
@@ -281,7 +272,6 @@ export default function ServicesPage() {
           </div>
         </div>
       </motion.div>
-
       {modalService && <ServiceModal service={modalService} onClose={() => setModalService(null)} />}
     </div>
   );

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 const items = [
   { problem: '❌ Недостатня кількість клієнтів', solution: '✅ Щоденний притік потенційних клієнтів' },
@@ -11,6 +12,8 @@ const items = [
 
 export default function ProblemsSolutions() {
   const [flipped, setFlipped] = useState<boolean[]>(new Array(items.length).fill(false));
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   const handleHover = (idx: number) => {
     setFlipped(prev => {
@@ -21,13 +24,23 @@ export default function ProblemsSolutions() {
   };
 
   return (
-    <section className="py-20 bg-darker">
+    <section ref={ref} className="py-20 bg-darker">
       <div className="container-custom">
-        <h2 className="text-center mb-12 gradient-text">Перетворюємо проблеми бізнесу у продажі</h2>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 gradient-text"
+        >
+          Перетворюємо проблеми бізнесу у продажі
+        </motion.h2>
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {items.map((item, idx) => (
-            <div
+            <motion.div
               key={idx}
+              initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: idx * 0.1 }}
               className="relative h-40 cursor-pointer perspective"
               onMouseEnter={() => handleHover(idx)}
             >
@@ -43,7 +56,7 @@ export default function ProblemsSolutions() {
                   <p className="text-xl font-bold text-green-400">{item.solution}</p>
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

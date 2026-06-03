@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { cases } from '@/lib/constants';
 import Button from '@/components/ui/Button';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -18,16 +19,16 @@ export default function CasesPage() {
       <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">Реальні результати, якими ми пишаємося</p>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
         {paginatedCases.map((c, idx) => (
-          <div key={idx} className="rounded-xl overflow-hidden bg-black border border-red/30 hover:border-red transition-all group">
+          <Link key={idx} href={`/cases/${c.slug}`} className="group block rounded-xl overflow-hidden bg-black border border-red/30 hover:border-red transition-all">
             <div className="h-48 bg-red/20 relative">
               <Image src={c.img} alt={c.title} fill className="object-cover group-hover:scale-105 transition duration-500" />
             </div>
             <div className="p-5">
               <h3 className="text-xl font-bold mb-2 group-hover:text-red transition">{c.title}</h3>
               <p className="text-gray-400 text-sm mb-4">{c.desc}</p>
-              <Button href={`/cases/${c.slug}`} variant="secondary">Детальніше</Button>
+              <Button variant="secondary" className="pointer-events-none">Детальніше</Button>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       {totalPages > 1 && (
