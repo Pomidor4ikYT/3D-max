@@ -196,25 +196,28 @@ export default function ServicesPage() {
     if (!selectedService?.formFields) return null;
     return selectedService.formFields.map((field, idx) => {
       switch (field.type) {
-        case 'select':
-          return (
-            <div key={idx}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label} {field.required && '*'}
-              </label>
-              <select
-                value={orderData[field.name] || ''}
-                onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                required={field.required}
-                className="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#c9a84c] focus:ring-2 focus:ring-[#c9a84c]/30 outline-none transition"
-              >
-                <option value="">Оберіть...</option>
-                {field.options.map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
-          );
+case 'select': {
+  // Безпечне отримання options (обхід TypeScript через any)
+  const options = (field as any).options || [];
+  return (
+    <div key={idx}>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {field.label} {field.required && '*'}
+      </label>
+      <select
+        value={orderData[field.name] || ''}
+        onChange={(e) => handleFieldChange(field.name, e.target.value)}
+        required={field.required}
+        className="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#c9a84c] focus:ring-2 focus:ring-[#c9a84c]/30 outline-none transition"
+      >
+        <option value="">Оберіть...</option>
+        {options.map((opt: string) => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
         case 'textarea':
           return (
             <div key={idx}>
