@@ -81,9 +81,6 @@ export default function MobileMenu({ isOpen, onClose, links }: { isOpen: boolean
             </nav>
 
             <div className="p-6 border-t border-gray-200 space-y-4">
-              <Button href="/order" variant="primary" onClick={onClose} className="w-full justify-center">
-                📞 Замовити дзвінок
-              </Button>
               <div className="flex justify-center gap-4 text-gray-400">
                 <a href="#" className="hover:text-[#c9a84c] transition">Telegram</a>
                 <a href="#" className="hover:text-[#c9a84c] transition">Instagram</a>

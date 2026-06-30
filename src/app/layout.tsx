@@ -3,21 +3,23 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PageTransition from '@/components/PageTransition';
+import AIConsultant from '@/components/ui/AIConsultant';
 
 export const metadata: Metadata = {
-  title: 'PR.тут – маркетингова агенція | Приводимо клієнтів, які купують',
-  description: 'AI-маркетинг, реклама, брендинг, SMM, SEO, 3D-друк. Допомагаємо бізнесу зростати через креатив та новітні технології.',
+  title: '3D-друк на замовлення | Сучасні вироби з пластику',
+  description: 'Професійний 3D-друк іграшок, прототипів, деталей для ЗСУ. Розрахунок за 15 хвилин. Доставка по всій Україні.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uk">
-      <body className="bg-black">
+      <body>
         <Header />
         <main>
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
+        <AIConsultant />
       </body>
     </html>
   );

@@ -1,32 +1,26 @@
 import Hero from '@/components/home/Hero';
-import Numbers from '@/components/home/Numbers';
-import ProblemsSolutions from '@/components/home/ProblemsSolutions';
-import PopularServices from '@/components/home/PopularServices';
-import Achievements from '@/components/home/Achievements';
-import AIPackages from '@/components/home/AIPackages';
-import CasesShowcase from '@/components/home/CasesShowcase';
-import HowWeWork from '@/components/home/HowWeWork';
-import AICapabilities from '@/components/home/AICapabilities';
-import TeamSlider from '@/components/home/TeamSlider';
+import Features from '@/components/home/Features';
+import Materials from '@/components/home/Materials';
+import Process from '@/components/home/Process';
+import Pricing from '@/components/home/Pricing';
+import GalleryPreview from '@/components/home/GalleryPreview';
 import Testimonials from '@/components/home/Testimonials';
 import FAQ from '@/components/home/FAQ';
+import Contact from '@/components/home/Contact';
 import FinalCTA from '@/components/home/FinalCTA';
 
 export default function Home() {
   return (
     <div className="overflow-hidden">
       <Hero />
-      <Numbers />
-      <ProblemsSolutions />
-      <PopularServices />
-      <Achievements />
-      <AIPackages />
-      <CasesShowcase />
-      <HowWeWork />
-      <AICapabilities />
-      <TeamSlider />
+      <Features />
+      <Materials />
+      <Process />
+      <Pricing />
+      <GalleryPreview />
       <Testimonials />
       <FAQ />
+      <Contact />
       <FinalCTA />
     </div>
   );

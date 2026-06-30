@@ -7,7 +7,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
   className?: string;
-  disabled?: boolean; // додано
+  disabled?: boolean;
 }
 
 export default function Button({ 
@@ -19,10 +19,10 @@ export default function Button({
   className = '', 
   disabled = false 
 }: ButtonProps) {
-  const base = `px-6 py-3 rounded-lg font-bold transition-all duration-300 inline-block text-center ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+  const base = `px-6 py-3 rounded-full font-bold transition-all duration-300 inline-block text-center ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
   const variants = {
-    primary: 'bg-gradient-to-r from-red to-red-dark hover:shadow-lg hover:shadow-red/50 text-white',
-    secondary: 'border border-red text-red hover:bg-red/10',
+    primary: 'bg-gradient-to-r from-[#1a3c34] to-[#2d5a4b] hover:shadow-lg hover:shadow-[#1a3c34]/40 text-white',
+    secondary: 'border-2 border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c]/10',
   };
   const classes = `${base} ${variants[variant]}`;
   
